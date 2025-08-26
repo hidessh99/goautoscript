@@ -785,7 +785,7 @@ function ns_domain_cloudflare() {
 	SUB_DOMAIN=${SUB}.kumpulanremaja.com
 	NS_DOMAIN=ns-${SUB_DOMAIN}
 	CF_ID=4rukadi@gmail.com
-    CF_KEY=7ukZXWX-lCbdRnp1f9s95ucK6CCceq3n1oIXhn5r
+    CF_KEY=10gCIyzyrWdvEqjSpdbafaIFEXZKIlm9DakWOoJ3
 	set -euo pipefail
 	IP=$(wget -qO- ipinfo.io/ip)
 ZONE=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}&status=active" \

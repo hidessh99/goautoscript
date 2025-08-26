@@ -193,6 +193,7 @@ function configure_acme() {
                 echo -e "${RB}[ ERROR ]${NC} Invalid option. Please choose 0-5."
                 ;;
         esac
+    done
 }
 
 # ================================
