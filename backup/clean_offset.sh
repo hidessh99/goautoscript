@@ -6,15 +6,6 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Reset warna
 clear
 
-source /home/autobackup.conf
+echo "Cleanup offset functionality has been disabled."
+echo "This script was dependent on Telegram bot functionality which has been removed."
 
-cleanup_updates() {
-    response=$(curl -s "https://api.telegram.org/bot$RECEIVER_TOKEN/getUpdates")
-    update_ids=$(echo "$response" | jq -r '.result[].update_id')
-
-    for id in $update_ids; do
-        curl -s "https://api.telegram.org/bot$RECEIVER_TOKEN/getUpdates?offset=$((id + 1))"
-    done
-}
-
-cleanup_updates

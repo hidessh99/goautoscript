@@ -32,37 +32,7 @@ MYIP=$(curl -s https://checkip.amazonaws.com/);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 NET=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1);
 start=$(date +%s)
-# NOTIFIKASI SYSTEMS
-NAMES=$(whoami)
-TOKEN="5813428539:AAGYOn5lRxkQGLPztqywj4ePcyNrSOg"
-CHAT_ID="1496322138"
-LOCAL_DATE="/usr/bin/"
-MYIP=$(wget -qO- ipinfo.io/ip)
-CITY=$(curl -s ipinfo.io/city)
-TIME=$(date +'%Y-%m-%d %H:%M:%S')
-RAMMS=$(free -m | awk 'NR==2 {print $2}')
-OS=$(cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/=//g' | sed 's/"//g' | sed 's/PRETTY_NAME//g')
-function secs_to_human() {
-echo -e "${WB}Installation time : $(( ${1} / 3600 )) hours $(( (${1} / 60) % 60 )) minute's $(( ${1} % 60 )) seconds${NC}"
-}
-function send_message() {
-    message="$1"
-    curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" -d "chat_id=$CHAT_ID&text=$message&parse_mode=HTML" > /dev/null 2>&1
-}
-function notification_bot() {
-domain=$(cat /usr/local/etc/xray/domain)
-    send_message "
-<u>INFORMATION VPS INSTALL SC PREMIUM</u>
-<code>TIME    : </code><code>${TIME}</code>
-<code>IPVPS   : </code><code>${MYIP}</code>
-<code>DOMAIN  : </code><code>${domain}</code>
-<code>LOKASI  : </code><code>${CITY}</code>
-<code>USER    : </code><code>${NAMES}</code>
-<code>RAM     : </code><code>${RAMMS}MB</code>
-<code>LINUX   : </code><code>${OS}</code>
-"
-}
-# END NOTIFIKASI SYSTEMS
+# Removed telegram notification system
 capitalizeFirstLetter() {
   echo "$1" | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}'
 }
@@ -1547,7 +1517,7 @@ echo ""
 echo -e "[ ${tyblue}NOTES${NC} ] Please Reboot After Installation All Complated."
 echo ""
 echo ""
-notification_bot
+# Removed notification_bot call
 history -c >/dev/null 2>&1
 > ~/.bash_history >/dev/null 2>&1
 rm -rf /root/setup.sh >/dev/null 2>&1

@@ -3,20 +3,7 @@
 cd
 clear
 
-# Membaca token bot dan chat ID dari file konfigurasi
-source /home/autobackup.conf
-
-send_message() {
-    message="$1"
-    curl -s -X POST "https://api.telegram.org/bot$RECEIVER_TOKEN/sendMessage" -d "chat_id=$CHAT_ID&text=$message" > /dev/null 2>&1
-}
-
-send_file() {
-    file_path="$1"
-    response=$(curl -s -F chat_id="$CHAT_ID" -F document=@"$file_path" "https://api.telegram.org/bot$RECEIVER_TOKEN/sendDocument") > /dev/null 2>&1
-    file_id=$(echo "$response" | jq -r '.result.document.file_id')
-    echo "$file_id"
-}
+# Removed telegram notification functions
 
 IP=$(wget -qO- ipinfo.io/ip);
 domain=$(cat /usr/local/etc/xray/domain)
@@ -65,8 +52,7 @@ cp -r /etc/limit/socks/ backup/limit/socks
 cd /root
 zip -r "$domain-$date.zip" backup > /dev/null 2>&1
 
-send_message "Proses Backup telah selesai. ${IP}"
-send_file "/root/$domain-$date.zip"
+# Removed telegram notification calls
 rm -rf /root/backup
 rm -r /root/$domain-$date.zip
 clear

@@ -58,40 +58,22 @@ function stop() {
     exit 0
 }
 
-# Fungsi untuk mengubah token bot penerima
+# Fungsi untuk mengubah token bot penerima (DISABLED)
 function change_receiver_token() {
-    echo "Please enter your receiver bot token"
-    read -rp "Token: " -e receiver_token
-    sed -i "s/^RECEIVER_TOKEN=.*/RECEIVER_TOKEN=$receiver_token/" /home/autobackup.conf
-    clear
-    echo "Receiver bot token has been changed"
+    echo "Token configuration has been disabled."
+    echo "Telegram functionality has been removed from the system."
 }
 
-# Fungsi untuk mengubah chat ID
+# Fungsi untuk mengubah chat ID (DISABLED)
 function change_chat_id() {
-    echo "Please enter your chat ID"
-    read -rp "Chat ID: " -e chat_id
-    sed -i "s/^CHAT_ID=.*/CHAT_ID=$chat_id/" /home/autobackup.conf
-    clear
-    echo "Chat ID has been changed"
+    echo "Chat ID configuration has been disabled."
+    echo "Telegram functionality has been removed from the system."
 }
 
-# Fungsi untuk mengirim pesan uji ke bot
+# Fungsi untuk mengirim pesan uji ke bot (DISABLED)
 function test_message() {
-    # Membaca token bot penerima dan chat ID dari file konfigurasi
-    source /home/autobackup.conf
-    if [[ "$RECEIVER_TOKEN" = "" || "$CHAT_ID" = "" ]]; then
-        echo "Please set the receiver token and chat ID in /home/autobackup.conf file"
-        exit 1
-    fi
-
-    # Mengirim pesan uji ke bot
-    curl -s -X POST "https://api.telegram.org/bot$RECEIVER_TOKEN/sendMessage" \
-        -d "chat_id=$CHAT_ID" \
-        -d "text=This is a test message from autobackup script\nIP: $IP\nDate: $(date +"%Y-%m-%d")"
-
-    clear
-    echo "Test message has been sent"
+    echo "Test message functionality has been disabled."
+    echo "Telegram functionality has been removed from the system."
 }
 
 clear
@@ -100,9 +82,9 @@ echo -e "     Autobackup Data $sts     "
 echo "=============================="
 echo "1. Start Autobackup"
 echo "2. Stop Autobackup"
-echo "3. Change Receiver Bot Token"
-echo "4. Change Chat ID"
-echo "5. Test Send Message"
+echo "3. Change Receiver Bot Token (DISABLED)"
+echo "4. Change Chat ID (DISABLED)"
+echo "5. Test Send Message (DISABLED)"
 echo "=============================="
 read -rp "Please enter the correct number: " -e num
 

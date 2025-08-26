@@ -56,17 +56,10 @@ while true; do
         unit="byte"
       fi
       limit=$(cat /etc/shadowsocks2022/.shadowsocks2022.db | grep -w "$akun" | awk '{print $5}')
-      TOKEN="5813428539:AAGYOn5lRxkQGLPztqywj4ePcyNrSOgMDSE"
-      CHAT_ID="1496322138"
-      DATE=$(date '+%Y-%m-%d')
-      TIME=$(date '+%H:%M:%S')
+      # Removed telegram configuration
       domain=$(cat /usr/local/etc/xray/domain)
 
-      # Fungsi untuk mengirim pesan menggunakan bot Telegram
-      send_message() {
-        message=$(echo -e "$1")
-        curl -s -X POST "https://api.telegram.org/bot$TOKEN/sendMessage" -d "chat_id=$CHAT_ID&parse_mode=HTML&text=$message" >/dev/null
-      }
+      # Removed telegram notification function
 
       if [ "$jum2" -gt "$limit" ]; then
         IPS=$(echo "$jum" | awk '{printf "%s  \n", $0}' | sort | uniq)
@@ -75,26 +68,7 @@ while true; do
           ISP=$(curl -s "http://ip-api.com/json/$IP" | grep -oP '(?<="isp":")[^"]+')
           IP_LIST+="$IP - $ISP\n"
         done <<< "$IPS"
-        send_message "
-<code>───────────────────────────</code>
-    <b>Laporan VPS - Multi Login</b>
-      <code><b>$domain</b></code>
-<code>───────────────────────────</code>
-      <b>XRay Shadowsocks2022</b>
-<code>───────────────────────────</code>
-
-Tanggal: $DATE
-Waktu: $TIME
-User: <b>$akun</b>
-Quota: <b>$quota $unit</b>
-Jumlah: <b>$jum2</b> Akun
-Limit Login: $limit
-IP Address:
-$IP_LIST
-
-Terdapat multi-login pada VPS.
-<code>───────────────────────────</code>
-"
+        # Removed telegram notification call
       elif [ "$jum2" -lt "$limit" ]; then
         echo ""
       else
