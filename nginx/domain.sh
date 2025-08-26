@@ -1,10 +1,10 @@
 #!/bin/bash
 apt install jq curl -y >> /dev/null 2>&1
-DOMAIN=sshserver.sbs
+DOMAIN=kumpulanremaja.com
 subb=$(</dev/urandom tr -dc a-z0-9 | head -c4)
-SUB_DOMAIN=${subb}.sshserver.sbs
-CF_ID=youemail@gmail.com
-CF_KEY=a014b1da0eab94cbe980e8024334637017497
+SUB_DOMAIN=${subb}.kumpulanremaja.com
+CF_ID=4rukadi@gmail.com
+CF_KEY=7ukZXWX-lCbdRnp1f9s95ucK6CCceq3n1oIXhn5r
 set -euo pipefail
 IPP=$(wget -qO- ipinfo.io/ip)
 ZONE=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}&status=active" \
