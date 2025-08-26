@@ -1243,101 +1243,9 @@ sleep 1
 echo -e "[ ${tyblue}NOTES${NC} ] Then run this script again"
 echo -e "[ ${tyblue}NOTES${NC} ] Notes, Script By : ZenSSH"
 echo ""
-# Variabel yang mungkin Anda miliki
-declare ROLES
-function license() {
-    apiURL="https://raw.githubusercontent.com/hidessh99/goautoscript/refs/heads/main/api/data/ip"
-    MYIP=$(curl -sS ipv4.icanhazip.com)
-    HTTP_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "$apiURL")
 
-   if [ "$HTTP_STATUS" -eq 403 ]; then
-        echo ""
-        echo -e "${RED}Access Denied. IP Not Allow, Please Register To Panel.${NC}"
-        echo ""
-        sleep 3
-        exit 1
-    elif [ "$HTTP_STATUS" -ne 200 ]; then
-        echo -e "${RED}Sorry, the server is currently under maintenance, please wait until it's finished.${NC}"
-        sleep 3
-        exit 1
-    fi
-
-    OUTPUT=$(curl -sS "$apiURL")
-    permission_found=false
-    TODAY=$(date +%Y-%m-%d)
-
-    while IFS= read -r line; do
-        # Skip lines that don't start with ###
-     if [[ "$line" =~ ^### ]]; then
-        # Remove leading ###
-        line=${line:4}
-
-        # Extract fields from the line
-        USERNAME=$(echo "$line" | awk '{print $1}')
-        EXPIRED=$(echo "$line" | awk '{print $2}')
-        IP=$(echo "$line" | awk '{print $3}')
-        PRICE=$(echo "$line" | awk '{print $4}')
-        X_API_KEY=$(echo "$line" | awk '{print $5}')
-        ROLES=$(echo "$line" | awk '{print $6}')
-        STATUS=$(echo "$line" | awk '{print $7}')
-
-        start_date=$(date +'%Y-%m-%d')
-        start_unix=$(date -d "$start_date" +%s)
-        end_unix=$(date -d "$EXPIRED" +%s)
-        diff=$(( (end_unix - start_unix) / (24*60*60) ))
-
-        # Memeriksa izin berdasarkan IP dan status
-        if [ "$MYIP" = "$IP" ] && [ "$TODAY" \< "$EXPIRED" ]; then
-            permission_found=true
-            if [ "$STATUS" = "active" ]; then
-                CAPITALIZED_ROLE=$(capitalizeFirstLetter "$ROLES")
-                echo -e "${BB}┌───────────────────────────────────────────────────────────────┐${NC}"
-                echo -e "${BB}│${NC} ${yell}                       • LICENSE VIPSSH •                    ${NC} ${BB}│$NC"
-                echo -e "${BB}└───────────────────────────────────────────────────────────────┘${NC}"
-                echo -e "${BB}╭───────────────────────────────────────────────────────────────╮${NC}"
-                echo -e "${tyblue}   Registered Name : ${YB}$USERNAME${NC}                                     ${BB}"
-                echo -e "${tyblue}   Registered IP   : ${YB}$IP${NC}                               ${BB}"
-                echo -e "${tyblue}   X-API KEY       : ${YB}$X_API_KEY${NC}                               ${BB}"
-                echo -e "${tyblue}   Roles License   : ${YB}$CAPITALIZED_ROLE${NC}                                      ${BB}"
-                echo -e "${tyblue}   Charge Balance  : ${YB}$PRICE${NC}                                      ${BB}"
-                echo -e "${tyblue}   Expired         : ${YB}Remaining $diff Days Until Expiration${NC}         ${BB}"
-                echo -e "${BB}╰───────────────────────────────────────────────────────────────╯${NC}"
-            elif [ "$STATUS" = "suspended" ]; then
-                # Menampilkan informasi dengan bentuk lain
-                echo -e "${BB}╭────────────────────────────────────────────────────────────────╮${NC}"
-                echo -e "${RED}   Your Account is Suspended for user $USERNAME${NC}"
-                echo -e "${BB}╰────────────────────────────────────────────────────────────────╯${NC}"
-                sleep 3
-                exit 1
-            elif [ "$STATUS" = "expired" ]; then
-                # Menampilkan informasi dengan bentuk lain
-                echo -e "${BB}╭───────────────────────────────────────────────────────────────╮${NC}"
-                echo -e "${RED}   Your Account has Expired for user $USERNAME${NC}"
-                echo -e "${BB}╰───────────────────────────────────────────────────────────────╯${NC}"
-                sleep 3
-                exit 1
-            else
-                echo -e "${BB}╭───────────────────────────────────────────────────────────────╮${NC}"
-                echo -e "${RED}   Invalid Account Status${NC}"
-                echo -e "${BB}╰───────────────────────────────────────────────────────────────╯${NC}"
-                sleep 3
-                exit 1
-              fi
-           fi
-        fi
-    done <<< "$OUTPUT"
-    # Menampilkan pesan jika izin tidak ditemukan
-    if [ "$permission_found" = false ]; then
-        echo -e "${BB}╭───────────────────────────────────────────────────────────────╮${NC}"
-        echo -e "${RED}      Access denied Please Register Your License${NC}"
-        echo -e "${BB}╰───────────────────────────────────────────────────────────────╯${NC}"
-        sleep 3
-        exit 1
-    fi
-}
-echo -e "[ ${tyblue}NOTES${NC} ] I need check your license first.."
-sleep 2
-license
+# License function removed
+# License check removed
 echo -e "[ ${tyblue}NOTES${NC} ] if you understand and start installing tap enter now.."
 read
 sleep 1
@@ -1378,8 +1286,7 @@ EOF
 cat <<EOF>> /etc/vipssh/theme/color.conf
 blue
 EOF
-#INSTALL BANNER SSH
-if [ "$CAPITALIZED_ROLE" = "Admin" ]; then
+#INSTALL BANNER SSH (default configuration)
 country=$(curl -s ipinfo.io/city)
 echo '<font color="green"><b><h3>&nbsp;&nbsp;Connected</h3></b>
 <h3>&nbsp;&nbsp;BANNER COUNTRY</h3>
@@ -1394,33 +1301,6 @@ echo '<font color="green"><b><h3>&nbsp;&nbsp;Connected</h3></b>
 &nbsp;&nbsp; <font color="#00990E"> HAPPY USE SUPPORT BY ZENSSH.COM </font> ' > /etc/zenssh
 sed -i '2d' "/etc/zenssh"
 sed -i '2i<h3>&nbsp;&nbsp;'"$country"'</h3>' "/etc/zenssh"
-elif [ "$CAPITALIZED_ROLE" = "Reseller" ]; then
-country=$(curl -s ipinfo.io/city)
-echo '<font color="green"><b><h3>&nbsp;&nbsp;Connected</h3></b>
-<h3>&nbsp;&nbsp;BANNER COUNTRY</h3>
-&nbsp;&nbsp;- <strong>[VIPSERVER]<strong><br>
-&nbsp;&nbsp;- No Torrent Activity<br>
-&nbsp;&nbsp;- No Multi Login 2 More Devices<br></font>
-&nbsp;&nbsp;<font color="red">- Breaking The Rules > Terminate<br><br></font>
-&nbsp;&nbsp; <font color="#00990E"> HAPPY USE SUPPORT BY ZENSSH.COM </font> ' > /etc/zenssh
-sed -i '2d' "/etc/zenssh"
-sed -i '2i<h3>&nbsp;&nbsp;'"$country"'</h3>' "/etc/zenssh"
-else
-country=$(curl -s ipinfo.io/city)
-echo '<font color="green"><b><h3>&nbsp;&nbsp;Connected</h3></b>
-<h3>&nbsp;&nbsp;BANNER COUNTRY</h3>
-&nbsp;&nbsp;- <strong>[FREE SERVER]<strong><br>
-&nbsp;&nbsp;- OUR SITE VISIT<br>
-&nbsp;&nbsp;- ZENSSH.COM<br>
-&nbsp;&nbsp;- SPEEDSSH.NET<br>
-&nbsp;&nbsp;- ROCKETSSH.NET<br>
-&nbsp;&nbsp;- No Torrent Activity<br>
-&nbsp;&nbsp;- No Multi Login 2 More Devices<br></font>
-&nbsp;&nbsp;<font color="red">- Breaking The Rules > Terminate<br><br></font>
-&nbsp;&nbsp; <font color="#00990E"> HAPPY USE SUPPORT BY ZENSSH.COM </font> ' > /etc/zenssh
-sed -i '2d' "/etc/zenssh"
-sed -i '2i<h3>&nbsp;&nbsp;'"$country"'</h3>' "/etc/zenssh"
-fi
 # END THEME
 clear
 # START INSTALL HAPROXY
