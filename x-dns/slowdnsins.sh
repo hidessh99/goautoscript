@@ -20,13 +20,13 @@ Suffix="\033[0m"
 apiFILE=$(cat /usr/bin/urlpanel)
 
 ns_domain_cloudflare() {
-	DOMAIN=cloudsrv.me
+    DOMAIN=kumpulanremaja.com
 	DAOMIN=$(cat /usr/local/etc/xray/domain)
 	SUB=$(tr </dev/urandom -dc a-z0-9 | head -c6)
-	SUB_DOMAIN=${SUB}.cloudsrv.me
+	SUB_DOMAIN=${SUB}.kumpulanremaja.com
 	NS_DOMAIN=ns-${SUB_DOMAIN}
-	CF_ID=youemail@gmail.com
-    CF_KEY=a014b1da0eab94cbe980e8024334637017497
+	CF_ID=4rukadi@gmail.com
+    CF_KEY=7ukZXWX-lCbdRnp1f9s95ucK6CCceq3n1oIXhn5r
 	set -euo pipefail
 	IP=$(wget -qO- ipinfo.io/ip)
 ZONE=$(curl -sLX GET "https://api.cloudflare.com/client/v4/zones?name=${DOMAIN}&status=active" \
