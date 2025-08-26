@@ -13,77 +13,7 @@ COLOR1="$(cat /etc/vipssh/theme/$colornow | grep -w "TEXT" | cut -d: -f2|sed 's/
 COLBG1="$(cat /etc/vipssh/theme/$colornow | grep -w "BG" | cut -d: -f2|sed 's/ //g')"
 ###########- END COLOR CODE -##########
 apiFILE=$(cat /usr/bin/urlpanel)
-checkPermission() {
-    apiURL=$(cat /usr/bin/key)
-    MYIP=$(curl -sS ipv4.icanhazip.com)
-    HTTP_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "$apiURL")
 
-   if [ "$HTTP_STATUS" -eq 403 ]; then
-        echo ""
-        echo -e "${RED}Access Denied. IP Not Allow, Please Register To Panel.${NC}"
-        echo ""
-        sleep 3
-        exit 1
-    elif [ "$HTTP_STATUS" -ne 200 ]; then
-        echo -e "${RED}Sorry, the server is currently under maintenance, please wait until it's finished.${NC}"
-        sleep 3
-        exit 1
-    fi
-
-    OUTPUT=$(curl -sS "$apiURL")
-    permission_found=false
-    TODAY=$(date +%Y-%m-%d)
-
-    while IFS= read -r line; do
-        # Skip lines that don't start with ###
-        if [[ "$line" =~ ^### ]]; then
-            # Remove leading ###
-            line=${line:4}
-
-            # Extract fields from the line
-            USERNAME=$(echo "$line" | awk '{print $1}')
-            EXPIRED=$(echo "$line" | awk '{print $2}')
-            IP=$(echo "$line" | awk '{print $3}')
-            X_API_KEY=$(echo "$line" | awk '{print $5}')
-            ROLES=$(echo "$line" | awk '{print $6}')
-            STATUS=$(echo "$line" | awk '{print $7}')
-
-            if [ "$MYIP" = "$IP" ] && [ "$TODAY" \< "$EXPIRED" ]; then
-                permission_found=true
-                if [ "$STATUS" = "active" ]; then
-                    echo -e "${GREEN}Permission Accepted for user $USERNAME with Key $X_API_KEY!${NC}"
-                    clear
-                    break
-                elif [ "$STATUS" = "suspended" ]; then
-                    echo -e "${RED}Access Denied! Your Permission Suspended for user $USERNAME with Key $X_API_KEY!${NC}"
-                    sleep 3
-                    exit 1
-                elif [ "$STATUS" = "expired" ]; then
-                    echo -e "${RED}Access Denied! Your permission has expired for user $USERNAME with Key $X_API_KEY!${NC}"
-                    sleep 3
-                    exit 1
-                else
-                    echo -e "${RED}Unknown Status for user $USERNAME with Key $X_API_KEY!${NC}"
-                    sleep 3
-                    exit 1
-                fi
-            fi
-        fi
-    done <<< "$OUTPUT"
-
-    if [ "$permission_found" = false ]; then
-        echo -e "${RED}Access Denied! Your IP is not registered or permission has expired.${NC}"
-        sleep 3
-        exit 1
-    fi
-}
-
-red='\e[1;31m'
-green='\e[1;32m'
-NC='\e[0m'
-green() { echo -e "\\033[32;1m${*}\\033[0m"; }
-red() { echo -e "\\033[31;1m${*}\\033[0m"; }
-checkPermission
 function addssh(){
 clear
 dnsdomain=$(cat /usr/sbin/vipssh/slowdns/dns)
@@ -630,7 +560,7 @@ function unlocksshall() {
             # Sending all locked usernames to the API in one request
             curl -X POST -H "Content-Type: application/json" \
                 -d "{ \"usernames\": [$json_array] }" \
-                https://panel.zenssh.com/api/permission/update/unlock > /dev/null 2>&1
+                https://raw.githubusercontent.com/hidessh99/goautoscript/refs/heads/main/api/permission/update/unlock > /dev/null 2>&1
 
     echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
     echo -e "$COLOR1┌────────────────────── BY ───────────────────────┐${NC}"
@@ -683,7 +613,7 @@ function unlockssh() {
 
         curl -X POST -H "Content-Type: application/json" \
             -d "{\"usernames\": [\"${selected_user}\"]}" \
-            https://panel.zenssh.com/api/permission/update/unlock > /dev/null 2>&1
+            https://raw.githubusercontent.com/hidessh99/goautoscript/refs/heads/main/api/permission/update/unlock > /dev/null 2>&1
 
         echo -e "$COLOR1[INFO] User $selected_user was unlocked.${NC}"
     else
@@ -744,7 +674,7 @@ function lockssh() {
         passwd -l "$selected_user" > /dev/null 2>&1
         curl -X POST -H "Content-Type: application/json" \
             -d "{\"usernames\": [\"${selected_user}\"]}" \
-            https://panel.zenssh.com/api/permission/update/lock > /dev/null 2>&1
+            https://raw.githubusercontent.com/hidessh99/goautoscript/refs/heads/main/api/permission/update/lock > /dev/null 2>&1
     echo -e "$COLOR1┌─────────────────────────────────────────────────┐${NC}"
     echo -e "$COLOR1│   • [INFO] User $selected_user was locked. •     ${NC}"
     echo -e "$COLOR1└─────────────────────────────────────────────────┘${NC}"
